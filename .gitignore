@@ -1,2 +1,2 @@
-manage/data/*
-notify/data/*
+manage/www/data/*
+notify/src/data/*
