@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  notify:
+    build: ./notify
+    ports:
+      - "8080:80"
+    volumes:
+      - ./notify/src/data:/src/data
+
+  manage:
+    build: ./manage
+    ports:
+      - "8081:80"
+    volumes:
+      - ./notify/src/data:/www/data

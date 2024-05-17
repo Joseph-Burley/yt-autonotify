@@ -1,0 +1,63 @@
+#!/bin/bash
+
+lookup() {
+    yt-dlp --extractor-args youtubetab:approximate_date --dump-json --break-on-reject --dateafter today-8days --playlist-end 3 $1 > temp.txt
+    # note to self: {title, id} might be a better way to do this
+    echo "$(jq -M -c --slurp '.[] | [.title, .id]' temp.txt)\n"
+}
+
+webhook_url=$(sqlite3 data/yt-notify.db "SELECT value FROM settings WHERE key='discord_webhook';")
+
+# get the names of the channels and the ids from the database and store them in a dictionary
+declare -A channels
+raw_data=$(sqlite3 data/yt-notify.db "SELECT * FROM channels;")
+
+echo -e "the raw data is: \n $raw_data"
+
+while IFS='|' read -r key value; do
+    channels["$key"]=$value
+done <<< "$raw_data"
+
+# use yt-dl to get the latest video from the channels
+for key in "${!channels[@]}"; do
+    channel_url="https://www.youtube.com/$key"
+    echo "the url is: $channel_url"
+    videos=$(lookup "$channel_url")
+    echo -e "the videos in channel ${channels[$key]} are: \n $videos"
+
+    #an associative array of videos
+    declare -A videos_array
+    while read -r video; do
+        echo "the row is: $video"
+        video_name=$(jq -r '.[0]' <<< "$video")
+        video_id=$(jq -r '.[1]' <<< "$video")
+        echo "video name: $video_name, video id: $video_id"
+
+        #check if the video has already been added in the database
+        #if not, add it
+        #if yes, do nothing
+        old_id=$(sqlite3 data/yt-notify.db "SELECT id FROM videos WHERE id = '$video_id';")
+        echo "the old id is: $old_id"
+        if [[ -z "$old_id" ]]; then
+            sqlite3 data/yt-notify.db "INSERT INTO videos (id, channel) VALUES ('$video_id', '$key');"
+            videos_array["$video_id"]=$video_name
+        fi
+        
+    done <<< "$videos"
+
+    message_text="The recent videos in the channel $key are:\n"
+    #echo the content of the array
+    echo "-------the content of the array is:-------"
+    for id in "${!videos_array[@]}"; do
+        echo "key: $id, value: ${videos_array[$id]}"
+        message_text+="\t$id, ${videos_array[$id]}\n"
+    done
+
+    ./discord.sh/discord.sh --webhook-url="$webhook_url" --text "$message_text"
+
+    # destroy the videos array
+    unset videos_array
+done
+
+rm temp.txt
+
