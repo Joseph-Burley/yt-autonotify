@@ -2,6 +2,10 @@
 <html>
 <head>
   <script src="functions.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
 <style>
 table {
   font-family: arial, sans-serif;
@@ -57,22 +61,6 @@ echo "<br>";
 echo "<input type='submit' value='Delete/Update'>";
 echo "</form>";
 
-/*
-echo "<table>
-<tr>
-<th>Key</th>
-<th>Value</th>
-</tr>";
-
-while($row = $result->fetchArray(SQLITE3_ASSOC)) {
-  echo "<tr>
-  <td>" . $row['key'] . "</td>
-  <td>" . $row['value'] . "</td>
-  </tr>";
-}
-
-echo "</table>";
-*/
 ?>
 
 <h2>Channels</h2>
@@ -81,20 +69,32 @@ echo "</table>";
 
 $result = $db->query("SELECT * FROM channels;");
 
+echo "<form name='channels' action='javascript:update_channels()' method='post' autocomplete='off'>";
 echo "<table>
 <tr>
-<th>Name</th>
+<th>Delete</th>
 <th>ID</th>
+<th>Name</th>
+<th>New Name</th>
 </tr>";
 
 while($row = $result->fetchArray(SQLITE3_ASSOC)) {
   echo "<tr>
-  <td>" . $row['name'] . "</td>
+  <td><input type='checkbox' name=" . 'deletechannel_' . $row['id'] . " value='" . $row['id'] . "'></td>
   <td>" . $row['id'] . "</td>
+  <td>" . $row['name'] . "</td>
+  <td><input type='text' name=". 'updatechannel_' . $row['id'] ." value=''></td>
   </tr>";
 }
 
 echo "</table>";
+echo "<label for='new_channel_id'>ID: </label>";
+echo "<input type='text' name='new_channel_id' value=''>";
+echo "<label for='new_channel_name'>Name: </label>";
+echo "<input typt='text' name='new_channel_name' value=''>";
+echo "<br>";
+echo "<input type='submit' value='Delete/Update'>";
+echo "</form>";
 
 ?>
 

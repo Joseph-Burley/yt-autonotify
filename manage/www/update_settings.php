@@ -11,7 +11,7 @@ if ($data === null && json_last_error() !== JSON_ERROR_NONE) {
     exit('Invalid JSON data');
 }
 
-print_r($data["delete"] . "\n");
+//print_r($data["delete"] . "\n");
 
     
     //print_r($_POST['add'] . "\n");
