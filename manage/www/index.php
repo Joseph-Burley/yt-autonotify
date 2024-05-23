@@ -30,7 +30,7 @@ $db = new SQLite3('data/yt-notify.db');
 
 $result = $db->query("SELECT * FROM settings;");
 
-echo "<form name='settings' action='javascript:update_settings()' method='post'>
+echo "<form name='settings' action='javascript:update_settings()' method='post' autocomplete='off'>
 <table>
 <tr>
 <th>Delete</th>

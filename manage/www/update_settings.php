@@ -1,4 +1,3 @@
-<html>
 <?php
     // Read the JSON string from the request body
 $jsonString = file_get_contents('php://input');
@@ -12,21 +11,34 @@ if ($data === null && json_last_error() !== JSON_ERROR_NONE) {
     exit('Invalid JSON data');
 }
 
-print_r($data['add']['key'] . ":" . $data['add']['value'] . "\n");
+print_r($data["delete"] . "\n");
 
     
     //print_r($_POST['add'] . "\n");
     //print_r($_POST['delete'] . "\n");
     //print_r($_POST['update'] . "\n");
     //print_r(gettype($_POST['update']) . "\n");
-/*
+
 $db = new SQLite3('data/yt-notify.db');
 
-$key = $_POST['key'];
-$value = $_POST['value'];
+//add new key value pairs first
+if ($data['add']['key'] != "" && $data['add']['value'] != "") {
+    $add_key = $data['add']['key'];
+    $add_value = $data['add']['value'];
+    $db->exec("INSERT INTO settings (key, value) VALUES ('$add_key', '$add_value');");
+}
 
-$db->exec("UPDATE settings SET value = '$value' WHERE key = '$key';");
-*/
+//update entries
+foreach ($data['update'] as $update_pair) {
+    $upk = $update_pair['key'];
+    $upv = $update_pair['value'];
+    $db->exec("UPDATE settings SET value = '$upv' WHERE key LIKE '$upk';");
+}
+
+//remove entries
+foreach ($data['delete'] as $key) {
+    $db->exec("DELETE FROM settings WHERE key LIKE '$key';");
+}
+
 
 ?>
-</html>

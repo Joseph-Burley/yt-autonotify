@@ -4,7 +4,7 @@ function update_settings() {
     const updateElements = [];
     var new_pair = {};
     for (const [key, value] of formData.entries()) {
-        console.log(key, value);
+        //console.log(key, value);
         if (key.startsWith('delete_')) {
             deleteElements.push(key.slice(7));
         } else if (key.startsWith('update_') && value != "") {
@@ -24,7 +24,7 @@ function update_settings() {
     }
     const data = { delete: deleteElements, update: updateElements, add: new_pair };
     const data_json = JSON.stringify(data);
-    console.log(data_json);
+    //console.log(data_json);
 
     const params = new URLSearchParams(data);
 
@@ -35,9 +35,11 @@ function update_settings() {
           },
         body: data_json
     })
-        .then(response => response.text())
-        .then(data => console.log(data))
+        .then(response => {if (response.ok) {
+            location.reload();
+        }})
+        //.then(data => console.log(data))
         .catch(error => console.error(error));
 
-    
+    //location.reload();
 }
