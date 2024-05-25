@@ -11,14 +11,6 @@ if ($data === null && json_last_error() !== JSON_ERROR_NONE) {
     exit('Invalid JSON data');
 }
 
-//print_r($data["delete"] . "\n");
-
-    
-    //print_r($_POST['add'] . "\n");
-    //print_r($_POST['delete'] . "\n");
-    //print_r($_POST['update'] . "\n");
-    //print_r(gettype($_POST['update']) . "\n");
-
 $db = new SQLite3('data/yt-notify.db');
 
 //add new key value pairs first

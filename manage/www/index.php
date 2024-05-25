@@ -52,14 +52,14 @@ while($row = $result->fetchArray(SQLITE3_ASSOC)) {
   </tr>";
 }
 
-echo "</table>";
-echo "<label for='new_key'>Key: </label>";
-echo "<input typt='text' name='new_key' value=''>";
-echo "<label for='new_value'>Value: </label>";
-echo "<input type='text' name='new_value' value=''>";
-echo "<br>";
-echo "<input type='submit' value='Delete/Update'>";
-echo "</form>";
+echo "</table>
+<label for='new_key'>Key: </label>
+<input typt='text' name='new_key' value=''>
+<label for='new_value'>Value: </label>
+<input type='text' name='new_value' value=''>
+<br>
+<input type='submit' value='Delete/Update'>
+</form>";
 
 ?>
 
@@ -69,8 +69,8 @@ echo "</form>";
 
 $result = $db->query("SELECT * FROM channels;");
 
-echo "<form name='channels' action='javascript:update_channels()' method='post' autocomplete='off'>";
-echo "<table>
+echo "<form name='channels' action='javascript:update_channels()' method='post' autocomplete='off'>
+<table>
 <tr>
 <th>Delete</th>
 <th>ID</th>
@@ -87,14 +87,14 @@ while($row = $result->fetchArray(SQLITE3_ASSOC)) {
   </tr>";
 }
 
-echo "</table>";
-echo "<label for='new_channel_id'>ID: </label>";
-echo "<input type='text' name='new_channel_id' value=''>";
-echo "<label for='new_channel_name'>Name: </label>";
-echo "<input typt='text' name='new_channel_name' value=''>";
-echo "<br>";
-echo "<input type='submit' value='Delete/Update'>";
-echo "</form>";
+echo "</table>
+<label for='new_channel_id'>ID: </label>
+<input type='text' name='new_channel_id' value=''>
+<label for='new_channel_name'>Name: </label>
+<input typt='text' name='new_channel_name' value=''>
+<br>
+<input type='submit' value='Delete/Update'>
+</form>";
 
 ?>
 
@@ -103,21 +103,26 @@ echo "</form>";
 <?php
 
 $result = $db->query("SELECT * FROM videos;");
-
-echo "<table>
+echo "<form name='videos' action='javascript:update_videos()' method='post' autocomplete='off'>
+<table>
 <tr>
+<th>Delete</th>
 <th>Video ID</th>
 <th>Channel</th>
 </tr>";
 
 while($row = $result->fetchArray(SQLITE3_ASSOC)) {
   echo "<tr>
+  <td> <input type='checkbox' name=" . 'deletevideo_' . $row['id'] . " value='" . $row['id'] . "'></td>
   <td>" . $row['id'] . "</td>
   <td>" . $row['channel'] . "</td>
   </tr>";
 }
 
-echo "</table>";
+echo "</table>
+<br>
+<input type='submit' value='Delete'>
+</form>";
 
 $db->close();
 
