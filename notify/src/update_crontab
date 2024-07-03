@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# retrive notify_cron_string from settings
+notify_cron_string=$(sqlite3 data/yt-notify.db "SELECT value FROM settings WHERE key = 'notify_cron_string';")
+
+# get current crontab
+current_crontab=$(crontab -l)
+
+# use awk to get the first five records from the first line of the crontab
+current_string=$(echo "$current_crontab" | awk 'NR==1{print $1,$2,$3,$4,$5}')
+
+echo "the current string is: $current_string"
+echo "the new string is: $notify_cron_string"
+
+
+# if the current string is not the same as the new string, update the crontab
+if [[ "$current_string" != "$notify_cron_string" ]]; then
+    echo "updating crontab"
+    rm temp_crontab
+    touch temp_crontab
+    echo "$notify_cron_string cd /src && yt-notify >> /var/log/notify.log" >> temp_crontab
+    echo "* * * * * echo "the time is: $(date)" >> /var/log/cron.log" >> temp_crontab
+    echo "* * * * * cd /src && ./update_crontab >> /var/log/update_crontab.log" >> temp_crontab
+    echo "" >> temp_crontab
+    cat temp_crontab | crontab -
+    #(crontab -l; echo "$notify_cron_string cd /src && yt-notify >> /var/log/notify.log") | crontab -
+fi

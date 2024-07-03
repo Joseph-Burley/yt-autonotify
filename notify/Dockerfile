@@ -15,6 +15,7 @@ RUN mkdir -p /src/data
 VOLUME /src/data
 
 # create link in /bin
+# is this needed?
 RUN ln -s /src/notify /bin/yt-notify
 
 RUN cat crontab

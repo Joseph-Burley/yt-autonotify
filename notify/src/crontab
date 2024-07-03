@@ -1,2 +1,3 @@
 * * * * * cd /src && yt-notify >> /var/log/notify.log
 * * * * * echo "the time is: $(date)" >> /var/log/cron.log
+* * * * * cd /src && ./update_crontab >> /var/log/update_crontab.log

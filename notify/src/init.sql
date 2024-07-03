@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS VIDEOS
 --pay attention to caps
 --insert default settings
 INSERT INTO SETTINGS (key, value) VALUES ('discord_webhook', 'https://discord.com/api/webhooks/1190840001999687881/iHDcgair5LUXgt5hgNuA2caWdcWD-WMUoUDVU9zIXMfJV7ZQltamoo_v7PfRdjctX7Zy');
+INSERT INTO SETTINGS (key, value) VALUES ('notify_cron_string', '* * * * *');
 
 --insert a few default channels
 INSERT INTO CHANNELS (name, id) VALUES ('Beau of the Fifth Column', '@BeauoftheFifthColumn');
