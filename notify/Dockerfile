@@ -31,6 +31,9 @@ RUN crontab /etc/cron.d/simple-cron
 # Create the log file to be able to run tail
 RUN touch /var/log/cron.log
 
+# pull discord.sh from github
+RUN git clone https://github.com/fieu/discord.sh.git
+
 # run init
 RUN chmod +x /src/initdb.sh
 #ENTRYPOINT ["/src/initdb.sh"]
