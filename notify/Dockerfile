@@ -5,6 +5,7 @@ RUN apt update && apt upgrade -y
 RUN apt install software-properties-common python3-launchpadlib -y
 RUN apt-add-repository ppa:tomtomtom/yt-dlp && apt update && apt install -y yt-dlp sqlite3 jq cron curl
 
+RUN apt install git -y
 # copy src files
 COPY src/ /src
 
